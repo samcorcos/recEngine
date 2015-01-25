@@ -2,20 +2,23 @@ Package.describe({
   name: 'samcorcos:recengine',
   version: '0.0.1',
   summary: 'Lightweight collaborative filter-like recommendation engine for Meteor',
-  // URL to the Git repository containing the source code for this package.
-  git: '',
-  // By default, Meteor will default to using README.md for documentation.
-  // To avoid submitting documentation, set this field to null.
+  git: 'https://github.com/samcorcos/recEngine.git',
   documentation: 'README.md'
 });
 
 Package.onUse(function(api) {
   api.versionsFrom('1.0.3.1');
-  api.addFiles('samcorcos:recengine.js');
+  api.use("coffeescript")
+  api.use("aldeed:collection2")
+  api.use("aldeed:simple-schema")
+  api.export("recEngine", "server")
+  api.export("RecEngine", "server")
+  api.addFiles('samcorcos:recengine.coffee');
+  api.addFiles('samcorcos:recengine-database.coffee')
 });
 
 Package.onTest(function(api) {
   api.use('tinytest');
   api.use('samcorcos:recengine');
-  api.addFiles('samcorcos:recengine-tests.js');
+  api.addFiles('samcorcos:recengine-tests.coffee');
 });

@@ -7,7 +7,7 @@ Simple, easily implemented recommendation engine.
 
 Associate items based on user "likes" using the syntax:
 
-`recEngine.like('<USERID>', '<ITEMID>')`
+`recEngine.link('<USERID>', '<ITEMID>')`
 
 Then, to get a recommendation, use the syntax:
 
