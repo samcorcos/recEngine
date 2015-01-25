@@ -3,9 +3,9 @@ RecEngineLinks = new Meteor.Collection('recEngineLinks')
 
 Schema = {}
 Schema.Link = new SimpleSchema
-  nodes:
+  link:
     type: [String]
-    label: "Nodes"
+    label: "Link"
     minCount: 2
     maxCount: 2
 

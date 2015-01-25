@@ -1,11 +1,18 @@
 recEngine = {}
 
 recEngine.link = (user, item) ->
-  RecEngine.upsert
-    nodes: [ user, item ]
-  ,
-    $inc:
-      weight: 1
+  RecEngineLinks.upsert
+      link: [ user, item ]
+    ,
+      $set:
+        link: [ user, item ]
+  return
+
+    # RecEngine.upsert
+    #   nodes: [ user, item ]
+    # ,
+    #   $inc:
+    #     weight: 1
 
 
 

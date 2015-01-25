@@ -13,6 +13,7 @@ Package.onUse(function(api) {
   api.use("aldeed:simple-schema")
   api.export("recEngine", "server")
   api.export("RecEngine", "server")
+  api.export("RecEngineLinks", "server")
   api.addFiles('samcorcos:recengine.coffee');
   api.addFiles('samcorcos:recengine-database-edges.coffee')
   api.addFiles('samcorcos:recengine-database-links.coffee')
