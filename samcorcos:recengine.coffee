@@ -3,24 +3,24 @@ recEngine = {}
 # The order of hte link matters in this schema... will have to fix later
 
 recEngine.link = (user, item) ->
-  RecEngineLinks.upsert
+  unless RecEngineLinks.findOne(
+    user: user
+    item: item
+  )
+    RecEngineLinks.insert
       user: user
       item: item
-    ,
-      $set:
-        user: user
-        item: item
 
-  temp = RecEngineLinks.find # this is saying "find me all items this user is linked to"
-    user: user
-  .fetch()
+    temp = RecEngineLinks.find # this is saying "find me all items this user is linked to"
+      user: user
+    .fetch()
 
-  temp.forEach (link) ->
-    RecEngine.upsert
-      nodes: [ link.item, item ]
-    ,
-      $inc:
-        weight: 1
+    temp.forEach (link) ->
+      RecEngine.upsert
+        nodes: [ link.item, item ]
+      ,
+        $inc:
+          weight: 1
 
 
 
