@@ -1,11 +1,15 @@
 recEngine = {}
 
+# The order of hte link matters in this schema... will have to fix later
+
 recEngine.link = (user, item) ->
   RecEngineLinks.upsert
-      link: [ user, item ]
+      link1: user
+      link2: item
     ,
       $set:
-        link: [ user, item ]
+        link1: user
+        link2: item
   return
 
     # RecEngine.upsert
