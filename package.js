@@ -14,7 +14,8 @@ Package.onUse(function(api) {
   api.export("recEngine", "server")
   api.export("RecEngine", "server")
   api.addFiles('samcorcos:recengine.coffee');
-  api.addFiles('samcorcos:recengine-database.coffee')
+  api.addFiles('samcorcos:recengine-database-edges.coffee')
+  api.addFiles('samcorcos:recengine-database-links.coffee')
 });
 
 Package.onTest(function(api) {
