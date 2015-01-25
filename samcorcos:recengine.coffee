@@ -4,19 +4,27 @@ recEngine = {}
 
 recEngine.link = (user, item) ->
   RecEngineLinks.upsert
-      link1: user
-      link2: item
+      user: user
+      item: item
     ,
       $set:
-        link1: user
-        link2: item
-  return
+        user: user
+        item: item
 
-    # RecEngine.upsert
-    #   nodes: [ user, item ]
-    # ,
-    #   $inc:
-    #     weight: 1
+  temp = RecEngineLinks.find # this is saying "find me all items this user is linked to"
+    user: user
+  .fetch()
+
+  temp.forEach (link) ->
+    RecEngine.upsert
+      nodes: [ link.item, item ]
+    ,
+      $inc:
+        weight: 1
+
+
+
+  return
 
 
 

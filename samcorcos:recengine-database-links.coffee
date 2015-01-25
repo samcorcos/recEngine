@@ -3,12 +3,12 @@ RecEngineLinks = new Meteor.Collection('recEngineLinks')
 
 Schema = {}
 Schema.Link = new SimpleSchema
-  link1:
+  user:
     type: String
-    label: "Link 1"
-  link2:
+    label: "user"
+  item:
     type: String
-    label: "Link 2"
+    label: "item"
 
 RecEngineLinks.attachSchema(Schema.Link)
 
