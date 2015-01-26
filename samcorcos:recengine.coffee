@@ -6,6 +6,8 @@ recEngine.upvote = (user, item) ->
 
   allItems = []
   sumWeight = 0
+  allEdges = RecEngine.find().fetch()
+  allUsers = RecEngineUpvotes.find().fetch()
 
   incrementWeight = -> # this function runs within the "addUserPair" function, because we only want to run the function if it's a new pair
     temp = RecEngineUpvotes.find(user: user).fetch() # this is saying "find me all items this user is linked to"
@@ -37,7 +39,7 @@ recEngine.upvote = (user, item) ->
   addUserPair()
 
   getAllItems = -> # makes allItems an array with all the unique items.
-    RecEngineUpvotes.find().fetch().forEach (pair, i) ->
+    allUsers.forEach (pair, i) ->
       allItems.push(pair.item) if allItems.indexOf(pair.item) is -1
       return
   getAllItems()
@@ -52,11 +54,15 @@ recEngine.upvote = (user, item) ->
   setDefaultValue()
 
   getSum = ->
-    allEdges = RecEngine.find().fetch()
     allEdges.forEach (edge) ->
       sumWeight += edge.weight
   getSum()
 
+  # Now, I need to update the user weight...
+  # that means,
+
+  updateUserWeight = ->
+  updateUserWeight()
 
   "Successfully linked!"
 
