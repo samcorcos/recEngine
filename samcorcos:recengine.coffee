@@ -6,6 +6,22 @@ recEngine.upvote = (user, item) ->
 
   allItems = []
 
+  incrementWeight = -> # this function runs within the "addUserPair" function, because we only want to run the function if it's a new pair
+    temp = RecEngineUpvotes.find(user: user).fetch() # this is saying "find me all items this user is linked to"
+
+    temp.forEach (upvote) ->
+      unless upvote.item is item # this takes care of words that match themselves
+
+        tempArray = [ upvote.item, item ];
+        tempArray.sort(); # sorts them so there are no repeats
+
+        RecEngine.update # this does not have to be upsert anymore, because all items should get created when we call setDefaultValue()
+          nodes: tempArray
+        ,
+          $inc:
+            weight: 1
+    return
+
   addUserPair = ->
     unless RecEngineUpvotes.findOne( # unless a pair of this user and item already exists...
       user: user
@@ -14,6 +30,8 @@ recEngine.upvote = (user, item) ->
       RecEngineUpvotes.insert # insert the pairing of the user and the item into RecEngine
         user: user
         item: item
+
+      incrementWeight()
       return
   addUserPair()
 
@@ -32,24 +50,6 @@ recEngine.upvote = (user, item) ->
     return
   setDefaultValue()
 
-  incrementWeight = ->
-    temp = RecEngineUpvotes.find # this is saying "find me all items this user is linked to"
-      user: user
-    .fetch()
-
-    temp.forEach (upvote) ->
-      unless upvote.item is item # this takes care of words that match themselves (which will always be highly correlated)
-
-        tempArray = [ upvote.item, item ];
-        tempArray.sort(); # sorts them so there are no repeats
-
-        RecEngine.update # this does not have to be upsert anymore, because all items should get created when we call setDefaultValue()
-          nodes: tempArray
-        ,
-          $inc:
-            weight: 1
-    return
-  # incrementWeight()
 
   getSum = ->
     "sum"
