@@ -11,7 +11,7 @@ Schema.Edge = new SimpleSchema
   weight:
     type: Number
     label: "Weight"
-    defaultValue: 0
+    defaultValue: 1
     optional: true
 
 RecEngine.attachSchema(Schema.Edge)

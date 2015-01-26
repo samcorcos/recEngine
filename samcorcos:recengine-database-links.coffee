@@ -1,8 +1,8 @@
 # Is there a reason this has to be a "Meteor" collection and not a "Mongo" collection
-RecEngineLinks = new Meteor.Collection('recEngineLinks')
+RecEngineUpvotes = new Meteor.Collection('recEngineUpvotes')
 
 Schema = {}
-Schema.Link = new SimpleSchema
+Schema.Upvote = new SimpleSchema
   user:
     type: String
     label: "user"
@@ -10,11 +10,11 @@ Schema.Link = new SimpleSchema
     type: String
     label: "item"
 
-RecEngineLinks.attachSchema(Schema.Link)
+RecEngineUpvotes.attachSchema(Schema.Upvote)
 
 if Meteor.isServer
-  Meteor.publish 'recEngineLinks', ->
-    RecEngineLinks.find()
+  Meteor.publish 'recEngineUpvotes', ->
+    RecEngineUpvotes.find()
 
 if Meteor.isClient
-  Meteor.subscribe 'recEngineLinks'
+  Meteor.subscribe 'recEngineUpvotes'
