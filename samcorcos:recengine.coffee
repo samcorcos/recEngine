@@ -16,32 +16,16 @@ recEngine.link = (user, item) ->
     .fetch()
 
     temp.forEach (link) ->
-      RecEngine.upsert
-        nodes: [ link.item, item ]
-      ,
-        $inc:
-          weight: 1
+      unless link.item is item # this takes care of words that match themselves (which will always be highly correlated)
+        tempArray = [ link.item, item ];
+        tempArray.sort();
+        RecEngine.upsert
+          nodes: tempArray
+        ,
+          $inc:
+            weight: 1
 
-
-
-  return
-
-
-
-
-###
-Right now what this is doing is:
-
-1) Taking user info
-2) showing how many times a user has liked that item
-
-What we want is:
-
-1)
-###
-
-
-
+  "Successfully linked!"
 
 
 
