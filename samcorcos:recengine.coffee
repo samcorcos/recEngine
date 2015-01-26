@@ -5,6 +5,7 @@ recEngine.upvote = (user, item) ->
   # 2) Get the weight of all items (sumWeight) and add "user" paired with each "item" with a "weight" of sumweight, using RecEngine.upsert
 
   allItems = []
+  sumWeight = 0
 
   incrementWeight = -> # this function runs within the "addUserPair" function, because we only want to run the function if it's a new pair
     temp = RecEngineUpvotes.find(user: user).fetch() # this is saying "find me all items this user is linked to"
@@ -50,13 +51,11 @@ recEngine.upvote = (user, item) ->
     return
   setDefaultValue()
 
-
   getSum = ->
-    "sum"
-
-  # console.log RecEngine.find().fetch()
-
-
+    allEdges = RecEngine.find().fetch()
+    allEdges.forEach (edge) ->
+      sumWeight += edge.weight
+  getSum()
 
 
   "Successfully linked!"
