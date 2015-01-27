@@ -1,7 +1,7 @@
 Package.describe({
   name: 'samcorcos:recengine',
-  version: '0.0.1',
-  summary: 'Lightweight collaborative filter-like recommendation engine for Meteor',
+  version: '1.0.0',
+  summary: 'Lightweight recommendation engine for Meteor',
   git: 'https://github.com/samcorcos/recEngine.git',
   documentation: 'README.md'
 });
