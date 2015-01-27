@@ -112,7 +112,7 @@ recEngine.link = function(user, item) {
       if (link.item !== item) {
         tempArray = [link.item, item];
         tempArray.sort();
-        RecEngine.update({ nodes: tempArray }, { $inc: { weight: 1 }});
+        RecEngine.upsert({ nodes: tempArray }, { $inc: { weight: 1 }});
       }
     });
   };
