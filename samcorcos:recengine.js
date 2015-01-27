@@ -1,3 +1,9 @@
+recEngine = {}
+
+recEngine.upvote = function(user, item) {
+  console.log(user, item);
+}
+
 // Represents an edge from source to sink with capacity
 var Edge = function(source, sink, capacity) {
   this.source = source;
