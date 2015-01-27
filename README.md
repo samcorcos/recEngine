@@ -109,3 +109,10 @@ This will give you how ever many suggestions you declared as the variable `numSu
 ## Additional information
 
 Keep in mind that this package only allows users to vote on each item once, which works for most voting systems, but not all.
+
+## To Do
+
+1. Optimize performance by storing suggestions
+2. Configurable number of records stored, to allow developer to change performance `recEngine.config.numRecords`
+3. Add a method for finding similar users `recEngine.similarUsers`
+4. Add a method for finding similar items `recEngine.similarItems`
