@@ -1,5 +1,4 @@
 # RecEngine
-==============
 
 Simple, easily implemented recommendation engine.
 
