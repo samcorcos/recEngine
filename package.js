@@ -1,6 +1,6 @@
 Package.describe({
   name: 'samcorcos:recengine',
-  version: '1.0.2',
+  version: '1.0.5',
   summary: 'Lightweight recommendation engine for Meteor',
   git: 'https://github.com/samcorcos/recEngine.git',
   documentation: 'README.md'

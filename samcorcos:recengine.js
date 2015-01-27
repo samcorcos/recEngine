@@ -101,7 +101,6 @@ recEngine = {}
 
 recEngine.link = function(user, item) {
   var allItems = [];
-  var sumWeight = 0;
   var allEdges = RecEngine.find().fetch()
   var allUsers = RecEngineLinks.find().fetch()
 
@@ -138,20 +137,6 @@ recEngine.link = function(user, item) {
   };
   getAllItems();
 
-  // Sets default value for items that haven't been upvoted yet
-  var setDefaultValue = function() {
-    allItems.forEach(function(xitem) {
-      var tempArray;
-      if (xitem !== item) {
-        tempArray = [item, xitem];
-        tempArray.sort();
-        if (RecEngine.find({nodes: tempArray}).fetch().length === 0) {
-          RecEngine.insert({ nodes: tempArray, weight: 0 });
-        }
-      }
-    });
-  };
-  setDefaultValue();
   return "Successfully Linked"
 }
 
