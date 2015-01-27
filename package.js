@@ -9,6 +9,7 @@ Package.describe({
 Package.onUse(function(api) {
   api.versionsFrom('1.0.3.1');
   api.use("coffeescript")
+  api.use("underscore")
   api.use("aldeed:collection2")
   api.use("aldeed:simple-schema")
   api.export("recEngine", "server")

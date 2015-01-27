@@ -1,65 +1,3 @@
-recEngine = {}
-
-recEngine.upvote = function(user, item) {
-  var allItems = [];
-  var sumWeight = 0;
-  var allEdges = RecEngine.find().fetch()
-  var allUsers = RecEngineUpvotes.find().fetch()
-
-  var incrementWeight = function() {
-    var temp = RecEngineUpvotes.find({ user: user }).fetch();
-    temp.forEach(function(upvote) {
-      var tempArray;
-      if (upvote.item !== item) {
-        tempArray = [upvote.item, item];
-        tempArray.sort();
-        RecEngine.update({ nodes: tempArray }, { $inc: { weight: 1 }});
-      }
-    });
-  };
-
-  var addUserPair = function() {
-    if (!RecEngineUpvotes.findOne({ user: user, item: item })) {
-      RecEngineUpvotes.insert({ user: user, item: item });
-      RecEngine.upsert({ nodes: [user, item]}, {$set: {weight: 9999999999}})
-      incrementWeight();
-    }
-  };
-  addUserPair();
-
-  var getAllItems = function() {
-    allUsers.forEach(function(pair) {
-      if (allItems.indexOf(pair.item) === -1) {
-        allItems.push(pair.item);
-      }
-    });
-  };
-  getAllItems();
-
-  var setDefaultValue = function() {
-    allItems.forEach(function(xitem) {
-      var tempArray;
-      if (xitem !== item) {
-        tempArray = [item, xitem];
-        tempArray.sort();
-        if (RecEngine.find({nodes: tempArray}).fetch().length === 0) {
-          RecEngine.insert({ nodes: tempArray });
-        }
-      }
-    });
-  };
-  setDefaultValue();
-  return "Successfully Linked"
-}
-
-
-
-
-
-
-
-
-
 // Represents an edge from source to sink with capacity
 var Edge = function(source, sink, capacity) {
   this.source = source;
@@ -140,15 +78,93 @@ var FlowNetwork = function() {
   };
 };
 
-var fn = new FlowNetwork();
-fn.addEdge('s','o',3);
-fn.addEdge('s','p',3);
-fn.addEdge('o','p',2);
-fn.addEdge('o','q',3);
-fn.addEdge('p','r',2);
-fn.addEdge('r','t',3);
-fn.addEdge('q','r',4);
-fn.addEdge('q','t',2);
-var max = fn.maxFlow('s','t');
 
-console.log(max);
+
+
+recEngine = {}
+
+recEngine.upvote = function(user, item) {
+  var allItems = [];
+  var sumWeight = 0;
+  var allEdges = RecEngine.find().fetch()
+  var allUsers = RecEngineUpvotes.find().fetch()
+
+  var incrementWeight = function() {
+    var temp = RecEngineUpvotes.find({ user: user }).fetch();
+    temp.forEach(function(upvote) {
+      var tempArray;
+      if (upvote.item !== item) {
+        tempArray = [upvote.item, item];
+        tempArray.sort();
+        RecEngine.update({ nodes: tempArray }, { $inc: { weight: 1 }});
+      }
+    });
+  };
+
+  var addUserPair = function() {
+    if (!RecEngineUpvotes.findOne({ user: user, item: item })) {
+      RecEngineUpvotes.insert({ user: user, item: item });
+      RecEngine.upsert({ nodes: [user, item]}, {$set: {weight: 9999999999}})
+      incrementWeight();
+    }
+  };
+  addUserPair();
+
+  var getAllItems = function() {
+    allUsers.forEach(function(pair) {
+      if (allItems.indexOf(pair.item) === -1) {
+        allItems.push(pair.item);
+      }
+    });
+  };
+  getAllItems();
+
+  var setDefaultValue = function() {
+    allItems.forEach(function(xitem) {
+      var tempArray;
+      if (xitem !== item) {
+        tempArray = [item, xitem];
+        tempArray.sort();
+        if (RecEngine.find({nodes: tempArray}).fetch().length === 0) {
+          RecEngine.insert({ nodes: tempArray });
+        }
+      }
+    });
+  };
+  setDefaultValue();
+  return "Successfully Linked"
+}
+
+
+
+recEngine.suggest = function(userId, numberOfRecs, cb) {
+  var error = "";
+  var result = {};
+
+  var allEdges = RecEngine.find().fetch()
+  var allUsers = RecEngineUpvotes.find().fetch()
+
+
+
+  // _.invert(result);
+
+  // set result to the top "numberOfRecs"
+  return cb(error, result)
+}
+
+
+//
+//
+//
+// var fn = new FlowNetwork();
+// fn.addEdge('s','o',3);
+// fn.addEdge('s','p',3);
+// fn.addEdge('o','p',2);
+// fn.addEdge('o','q',3);
+// fn.addEdge('p','r',2);
+// fn.addEdge('r','t',3);
+// fn.addEdge('q','r',4);
+// fn.addEdge('q','t',2);
+// var max = fn.maxFlow('s','t');
+//
+// console.log(max);
