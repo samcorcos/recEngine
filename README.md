@@ -10,7 +10,7 @@ $ meteor add samcorcos:recengine
 Associate items based on user "likes" using the syntax:
 
 ```
-recEngine.link('<USERID>', '<ITEMID>')
+recEngine.upvote('<USERID>', '<ITEMID>')
 ```
 
 Then, to get a recommendation, use the syntax:
