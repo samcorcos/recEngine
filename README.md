@@ -1,7 +1,6 @@
 # RecEngine
 
-Lightweight, easily impl
-emented recommendation engine. Used for suggesting products,
+Lightweight, easily implemented recommendation engine. This package is for users who are "liking" things, "purchasing" things, or "voting" on things.
 
 ```
 $ meteor add samcorcos:recengine
@@ -77,7 +76,7 @@ This means that Zeke would most probably like coffee given the preferences of hi
 
 ## More Practical Example
 
-Say you have an app that keeps track of "likes" or "upvotes". In the method you wrote to keep track of upvotes, you can add a call to `recEngine.upvote('<USERID>', '<ITEMID>')` in your function. For example:
+Say you have an app that keeps track of "likes" or "upvotes". In the method you wrote to keep track of upvotes, you can add a call to `recEngine.link('<USERID>', '<ITEMID>')` in your function. For example:
 
 ```
 Meteor.methods({
@@ -85,7 +84,7 @@ Meteor.methods({
     var userId = Meteor.user()._id;
     Movies.update({ _id: movie._id}, {$addToSet: { upvotes: userId} }, function(err, res) {
     if (err) console.log(err);
-    recEngine.upvote(userId, movie._id);
+    recEngine.link(userId, movie._id);
     });
   }
 })
