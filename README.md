@@ -1,12 +1,12 @@
 # RecEngine
 
-Simple, easily implemented recommendation engine.
+Lightweight, easily implemented recommendation engine.
 
 ```
 $ meteor add samcorcos:recengine
 ```
 
-Associate items based on user "likes" using the syntax:
+Associate items based on user "upvotes" and "likes" using the syntax:
 
 ```
 recEngine.upvote('<USERID>', '<ITEMID>')
