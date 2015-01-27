@@ -172,24 +172,28 @@ recEngine.suggest = function(userId, numSuggestions, cb) {
       fn.addEdge(edge.nodes[0], edge.nodes[1], edge.weight);
     })
 
+    // As long as the item isn't directly touching the user, add it to the results array
     if (fn.maxFlow(userId, item) < 9999999999) {
       result.push({ suggestion: item, weight: fn.maxFlow(userId, item) })
-
     }
   })
 
+  // Sort the results in order of weight
   result.sort(function(a,b) {
     if (a.weight < b.weight) { return 1; }
     if (a.weight > b.weight) { return -1; }
     return 0;
   })
 
+  // Error handle for insufficient data
   if (numSuggestions > result.length) {
     error = "Insufficient data! Only data for " + result.length + " suggestions."
     console.error(error);
   }
 
+  // Slice the results to handle
   result = result.slice(0, numSuggestions);
 
+  // Return with any errors and the result
   return cb(error, result)
 }

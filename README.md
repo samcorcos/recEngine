@@ -102,4 +102,4 @@ This will give you how ever many suggestions you declared as the variable `numSu
 
 ## Additional information
 
-Keep in mind that this package only allows users to vote on each item once.
+Keep in mind that this package only allows users to vote on each item once, which works for most voting systems, but not all.
