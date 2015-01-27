@@ -75,7 +75,8 @@ var FlowNetwork = function() {
   // Find the max flow in this network
   this.maxFlow = function(source, sink) {
     var path = this.findPath(source, sink, []);
-    while(path != null) {
+    while(path != null) {       // ERROR IS HERE - INFINITE LOOP
+      console.log("while");
       var flow = 9999999999;
       // Find the minimum flow
       for(var i=0;i<path.length;i++)
@@ -88,8 +89,10 @@ var FlowNetwork = function() {
       path = this.findPath(source, sink, []);
     }
     var sum = 0;
-    for(var i=0;i<this.edges[source].length;i++)
-    sum += this.edges[source][i].flow;
+    for (var i=0;i<this.edges[source].length;i++)
+      if (this.edges[source][i].flow) {
+        sum += this.edges[source][i].flow;
+      }
     return sum;
   };
 };
@@ -112,7 +115,7 @@ recEngine.link = function(user, item) {
       if (link.item !== item) {
         tempArray = [link.item, item];
         tempArray.sort();
-        RecEngine.upsert({ nodes: tempArray }, { $inc: { weight: 1 }});
+        RecEngine.update({ nodes: tempArray }, { $inc: { weight: 1 }});
       }
     });
   };
@@ -136,6 +139,21 @@ recEngine.link = function(user, item) {
     });
   };
   getAllItems();
+
+  // Do we need to set the default value?
+  var setDefaultValue = function() {
+    allItems.forEach(function(xitem) {
+      var tempArray;
+      if (xitem !== item) {
+        tempArray = [item, xitem];
+        tempArray.sort();
+        if (RecEngine.find({nodes: tempArray}).fetch().length === 0) {
+          RecEngine.insert({ nodes: tempArray, weight: 0 });
+        }
+      }
+    });
+  };
+  setDefaultValue();
 
   return "Successfully Linked"
 }
@@ -169,13 +187,16 @@ recEngine.suggest = function(userId, numSuggestions, cb) {
 
     allEdges.forEach(function(edge) { // add all the edges
       fn.addEdge(edge.nodes[0], edge.nodes[1], edge.weight);
+
     })
 
-    // As long as the item isn't directly touching the user, add it to the results array
     if (fn.maxFlow(userId, item) < 9999999999) {
       result.push({ suggestion: item, weight: fn.maxFlow(userId, item) })
     }
+    // As long as the item isn't directly touching the user, add it to the results array
+
   })
+
 
   // Sort the results in order of weight
   result.sort(function(a,b) {
@@ -189,6 +210,7 @@ recEngine.suggest = function(userId, numSuggestions, cb) {
     error = "Insufficient data! Only data for " + result.length + " suggestions."
     console.error(error);
   }
+
 
   // Slice the results to handle
   result = result.slice(0, numSuggestions);
