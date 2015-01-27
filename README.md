@@ -1,15 +1,16 @@
 # RecEngine
 
-Lightweight, easily implemented recommendation engine.
+Lightweight, easily impl
+emented recommendation engine. Used for suggesting products,
 
 ```
 $ meteor add samcorcos:recengine
 ```
 
-Associate items based on user "upvotes" and "likes" using the syntax:
+Associate items based on user "upvotes", "likes", "purchases", etc using the syntax:
 
 ```
-recEngine.upvote('<USERID>', '<ITEMID>')
+recEngine.link('<USERID>', '<ITEMID>')
 ```
 
 Then, to get a recommendation, use the syntax:
@@ -41,21 +42,21 @@ This works not only with `USERID`s, but with colloquial names and just about any
 ```
 if (Meteor.isServer) {
   Meteor.startup(function () {
-    recEngine.upvote("Mike", "cake");
-    recEngine.upvote("Mike", "coffee");
-    recEngine.upvote("Mike", "pie");
-    recEngine.upvote("Sarah", "coffee");
-    recEngine.upvote("Sarah", "cake");
-    recEngine.upvote("Alex", "yogurt");
-    recEngine.upvote("Alex", "cake");
-    recEngine.upvote("John", "cake");
-    recEngine.upvote("John", "coffee");
-    recEngine.upvote("John", "pie");
-    recEngine.upvote("Nick", "coffee");
-    recEngine.upvote("Nick", "cake");
-    recEngine.upvote("Sally", "yogurt");
-    recEngine.upvote("Sally", "cake");
-    recEngine.upvote("Zeke", "cake");
+    recEngine.link("Mike", "cake");
+    recEngine.link("Mike", "coffee");
+    recEngine.link("Mike", "pie");
+    recEngine.link("Sarah", "coffee");
+    recEngine.link("Sarah", "cake");
+    recEngine.link("Alex", "yogurt");
+    recEngine.link("Alex", "cake");
+    recEngine.link("John", "cake");
+    recEngine.link("John", "coffee");
+    recEngine.link("John", "pie");
+    recEngine.link("Nick", "coffee");
+    recEngine.link("Nick", "cake");
+    recEngine.link("Sally", "yogurt");
+    recEngine.link("Sally", "cake");
+    recEngine.link("Zeke", "cake");
 
     recEngine.suggest("Zeke", 2, function(err,res) {
       if (err) console.log(err);

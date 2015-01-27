@@ -1,6 +1,6 @@
 Package.describe({
   name: 'samcorcos:recengine',
-  version: '1.0.0',
+  version: '1.0.1',
   summary: 'Lightweight recommendation engine for Meteor',
   git: 'https://github.com/samcorcos/recEngine.git',
   documentation: 'README.md'
@@ -11,7 +11,7 @@ Package.onUse(function(api) {
   api.use("underscore")
   api.export("recEngine", "server")
   api.export("RecEngine", "server")
-  api.export("RecEngineUpvotes", "server")
+  api.export("RecEngineLinks", "server")
   api.addFiles('samcorcos:recengine.js')
 });
 

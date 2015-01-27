@@ -6,11 +6,11 @@ if (Meteor.isServer) {
   });
 }
 
-RecEngineUpvotes = new Meteor.Collection('recEngineUpvotes')
+RecEngineLinks = new Meteor.Collection('recEngineLinks')
 
 if (Meteor.isServer) {
-  Meteor.publish('recEngineUpvotes', function() {
-    RecEngineUpvotes.find({})
+  Meteor.publish('recEngineLinks', function() {
+    RecEngineLinks.find({})
   });
 }
 
@@ -99,19 +99,19 @@ var FlowNetwork = function() {
 
 recEngine = {}
 
-recEngine.upvote = function(user, item) {
+recEngine.link = function(user, item) {
   var allItems = [];
   var sumWeight = 0;
   var allEdges = RecEngine.find().fetch()
-  var allUsers = RecEngineUpvotes.find().fetch()
+  var allUsers = RecEngineLinks.find().fetch()
 
   // Add 1 to the weight if the items have been upvoted by similar people
   var incrementWeight = function() {
-    var temp = RecEngineUpvotes.find({ user: user }).fetch();
-    temp.forEach(function(upvote) {
+    var temp = RecEngineLinks.find({ user: user }).fetch();
+    temp.forEach(function(link) {
       var tempArray;
-      if (upvote.item !== item) {
-        tempArray = [upvote.item, item];
+      if (link.item !== item) {
+        tempArray = [link.item, item];
         tempArray.sort();
         RecEngine.update({ nodes: tempArray }, { $inc: { weight: 1 }});
       }
@@ -120,8 +120,8 @@ recEngine.upvote = function(user, item) {
 
   // Add user pair to a separate database
   var addUserPair = function() {
-    if (!RecEngineUpvotes.findOne({ user: user, item: item })) {
-      RecEngineUpvotes.insert({ user: user, item: item });
+    if (!RecEngineLinks.findOne({ user: user, item: item })) {
+      RecEngineLinks.insert({ user: user, item: item });
       RecEngine.upsert({ nodes: [user, item]}, {$set: {weight: 9999999999}})
       incrementWeight();
     }
@@ -162,7 +162,7 @@ recEngine.suggest = function(userId, numSuggestions, cb) {
   var result = [];
 
   var allEdges = [];
-  var allUsers = RecEngineUpvotes.find().fetch()
+  var allUsers = RecEngineLinks.find().fetch()
   var allItems = [];
 
   var getAllItems = function() { // Gets all the items in the database so we can iterate over them
