@@ -56,6 +56,7 @@ if (Meteor.isServer) {
     recEngine.upvote("Sally", "yogurt");
     recEngine.upvote("Sally", "cake");
     recEngine.upvote("Zeke", "cake");
+
     recEngine.suggest("Zeke", 2, function(err,res) {
       if (err) console.log(err);
       console.log(res);
@@ -64,7 +65,7 @@ if (Meteor.isServer) {
 }
 ```
 
-... and your console should read:
+... and your server console should read:
 
 ```
 [ { suggestion: 'coffee', weight: 3 },
