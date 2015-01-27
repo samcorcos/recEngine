@@ -18,5 +18,5 @@ Package.onUse(function(api) {
 Package.onTest(function(api) {
   api.use('tinytest');
   api.use('samcorcos:recengine');
-  api.addFiles('samcorcos:recengine-tests.coffee');
+  api.addFiles('samcorcos:recengine-tests.js');
 });
