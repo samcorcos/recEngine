@@ -21,6 +21,7 @@ recEngine.upvote = function(user, item) {
   var addUserPair = function() {
     if (!RecEngineUpvotes.findOne({ user: user, item: item })) {
       RecEngineUpvotes.insert({ user: user, item: item });
+      RecEngine.upsert({ nodes: [user, item]}, {$set: {weight: 9999999999}})
       incrementWeight();
     }
   };
