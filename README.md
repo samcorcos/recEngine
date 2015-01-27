@@ -72,7 +72,7 @@ if (Meteor.isServer) {
   { suggestion: 'pie', weight: 2 } ]
 ```
 
-This means that Zeke would most probably like yogurt given the preferences of his peers, and would probably also like coffee and pie, though, to a lesser degree.
+This means that Zeke would most probably like coffee given the preferences of his peers, and would probably also like pie, though, to a lesser degree.
 
 ## More Practical Example
 
