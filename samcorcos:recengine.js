@@ -140,9 +140,19 @@ recEngine.upvote = function(user, item) {
 recEngine.suggest = function(userId, numberOfRecs, cb) {
   var error = "";
   var result = {};
+  var allEdges = [];
 
-  var allEdges = RecEngine.find().fetch()
-  var allUsers = RecEngineUpvotes.find().fetch()
+  RecEngine.find({ weight: { $lt: 9999999999 }}).fetch().forEach(function(x) {
+    allEdges.push(x);
+  }) // Finds all edges, minus user edges.
+  RecEngine.find({ nodes: { $in: [userId] }}).fetch().forEach(function(x) {
+    allEdges.push(x);
+  }) // Finds all edges associated with the current user
+
+  result = allEdges;
+
+  var fn = new FlowNetwork();
+
 
 
 
