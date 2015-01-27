@@ -1,8 +1,63 @@
 recEngine = {}
 
 recEngine.upvote = function(user, item) {
-  console.log(user, item);
+  var allItems = [];
+  var sumWeight = 0;
+  var allEdges = RecEngine.find().fetch()
+  var allUsers = RecEngineUpvotes.find().fetch()
+
+  var incrementWeight = function() {
+    var temp = RecEngineUpvotes.find({ user: user }).fetch();
+    temp.forEach(function(upvote) {
+      var tempArray;
+      if (upvote.item !== item) {
+        tempArray = [upvote.item, item];
+        tempArray.sort();
+        RecEngine.update({ nodes: tempArray }, { $inc: { weight: 1 }});
+      }
+    });
+  };
+
+  var addUserPair = function() {
+    if (!RecEngineUpvotes.findOne({ user: user, item: item })) {
+      RecEngineUpvotes.insert({ user: user, item: item });
+      incrementWeight();
+    }
+  };
+  addUserPair();
+
+  var getAllItems = function() {
+    allUsers.forEach(function(pair) {
+      if (allItems.indexOf(pair.item) === -1) {
+        allItems.push(pair.item);
+      }
+    });
+  };
+  getAllItems();
+
+  var setDefaultValue = function() {
+    allItems.forEach(function(xitem) {
+      var tempArray;
+      if (xitem !== item) {
+        tempArray = [item, xitem];
+        tempArray.sort();
+        if (RecEngine.find({nodes: tempArray}).fetch().length === 0) {
+          RecEngine.insert({ nodes: tempArray });
+        }
+      }
+    });
+  };
+  setDefaultValue();
+  return "Successfully Linked"
 }
+
+
+
+
+
+
+
+
 
 // Represents an edge from source to sink with capacity
 var Edge = function(source, sink, capacity) {
