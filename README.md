@@ -21,7 +21,7 @@ recEngine.suggest('<USERID>', <NUMBER OF SUGGESTIONS>, function(error, result) {
   // Within the "result" object is "suggestion" and "weight"
   // "suggestion" is the item being suggested
   // "weight" is the strength of the suggestion -- higher number means stronger suggestion
-  })
+})
 ```
 
 ## Algorithm
@@ -40,15 +40,15 @@ This works not only with `USERID`s, but with colloquial names and just about any
 ```
 if (Meteor.isServer) {
   Meteor.startup(function () {
-    recEngine.upvote("mike", "cake");
-    recEngine.upvote("mike", "coffee");
-    recEngine.upvote("mike", "pie");
-    recEngine.upvote("bob", "coffee");
-    recEngine.upvote("bob", "cake");
-    recEngine.upvote("alex", "yogurt");
-    recEngine.upvote("alex", "cake");
-    recEngine.upvote("zeke", "cake");
-    recEngine.suggest("zeke", 3, function(err,res) {
+    recEngine.upvote("Mike", "cake");
+    recEngine.upvote("Mike", "coffee");
+    recEngine.upvote("Mike", "pie");
+    recEngine.upvote("Bob", "coffee");
+    recEngine.upvote("Bob", "cake");
+    recEngine.upvote("Alex", "yogurt");
+    recEngine.upvote("Alex", "cake");
+    recEngine.upvote("Zeke", "cake");
+    recEngine.suggest("Zeke", 3, function(err,res) {
       if (err) console.log(err);
       console.log(res);
     })
@@ -63,3 +63,5 @@ if (Meteor.isServer) {
   { suggestion: 'coffee', weight: 2 },
   { suggestion: 'pie', weight: 2 } ]
 ```
+
+This means that Zeke would most probably like yogurt given the preferences of his peers, and would probably also like coffee and pie, though, to a lesser degree.
