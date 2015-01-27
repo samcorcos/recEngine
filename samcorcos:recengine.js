@@ -189,5 +189,7 @@ recEngine.suggest = function(userId, numSuggestions, cb) {
     console.error(error);
   }
 
+  result = result.slice(0, numSuggestions);
+
   return cb(error, result)
 }
