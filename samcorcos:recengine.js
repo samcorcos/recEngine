@@ -1,3 +1,19 @@
+RecEngine = new Meteor.Collection('recEngine')
+
+if (Meteor.isServer) {
+  Meteor.publish('recEngine', function() {
+    RecEngine.find({})
+  });
+}
+
+RecEngineUpvotes = new Meteor.Collection('recEngineUpvotes')
+
+if (Meteor.isServer) {
+  Meteor.publish('recEngineUpvotes', function() {
+    RecEngineUpvotes.find({})
+  });
+}
+
 // Represents an edge from source to sink with capacity
 var Edge = function(source, sink, capacity) {
   this.source = source;

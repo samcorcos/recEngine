@@ -44,12 +44,19 @@ if (Meteor.isServer) {
     recEngine.upvote("Mike", "cake");
     recEngine.upvote("Mike", "coffee");
     recEngine.upvote("Mike", "pie");
-    recEngine.upvote("Bob", "coffee");
-    recEngine.upvote("Bob", "cake");
+    recEngine.upvote("Sarah", "coffee");
+    recEngine.upvote("Sarah", "cake");
     recEngine.upvote("Alex", "yogurt");
     recEngine.upvote("Alex", "cake");
+    recEngine.upvote("John", "cake");
+    recEngine.upvote("John", "coffee");
+    recEngine.upvote("John", "pie");
+    recEngine.upvote("Nick", "coffee");
+    recEngine.upvote("Nick", "cake");
+    recEngine.upvote("Sally", "yogurt");
+    recEngine.upvote("Sally", "cake");
     recEngine.upvote("Zeke", "cake");
-    recEngine.suggest("Zeke", 3, function(err,res) {
+    recEngine.suggest("Zeke", 2, function(err,res) {
       if (err) console.log(err);
       console.log(res);
     })
@@ -60,8 +67,7 @@ if (Meteor.isServer) {
 ... and your console should read:
 
 ```
-[ { suggestion: 'yogurt', weight: 4 },
-  { suggestion: 'coffee', weight: 2 },
+[ { suggestion: 'coffee', weight: 3 },
   { suggestion: 'pie', weight: 2 } ]
 ```
 
