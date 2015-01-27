@@ -60,7 +60,7 @@ var FlowNetwork = function() {
   this.maxFlow = function(source, sink) {
     var path = this.findPath(source, sink, []);
     while(path != null) {
-      var flow = 999999;
+      var flow = 9999999999;
       // Find the minimum flow
       for(var i=0;i<path.length;i++)
       if(path[i][1] < flow) flow = path[i][1];
@@ -89,6 +89,7 @@ recEngine.upvote = function(user, item) {
   var allEdges = RecEngine.find().fetch()
   var allUsers = RecEngineUpvotes.find().fetch()
 
+  // Add 1 to the weight if the items have been upvoted by similar people
   var incrementWeight = function() {
     var temp = RecEngineUpvotes.find({ user: user }).fetch();
     temp.forEach(function(upvote) {
@@ -101,6 +102,7 @@ recEngine.upvote = function(user, item) {
     });
   };
 
+  // Add user pair to a separate database
   var addUserPair = function() {
     if (!RecEngineUpvotes.findOne({ user: user, item: item })) {
       RecEngineUpvotes.insert({ user: user, item: item });
@@ -110,6 +112,7 @@ recEngine.upvote = function(user, item) {
   };
   addUserPair();
 
+  // Get all items in an array
   var getAllItems = function() {
     allUsers.forEach(function(pair) {
       if (allItems.indexOf(pair.item) === -1) {
@@ -119,6 +122,7 @@ recEngine.upvote = function(user, item) {
   };
   getAllItems();
 
+  // Sets default value for items that haven't been upvoted yet
   var setDefaultValue = function() {
     allItems.forEach(function(xitem) {
       var tempArray;
@@ -139,8 +143,20 @@ recEngine.upvote = function(user, item) {
 
 recEngine.suggest = function(userId, numberOfRecs, cb) {
   var error = "";
-  var result = {};
+  var result = [];
+
   var allEdges = [];
+  var allUsers = RecEngineUpvotes.find().fetch()
+  var allItems = [];
+
+  var getAllItems = function() { // Gets all the items in the database so we can iterate over them
+    allUsers.forEach(function(pair) {
+      if (allItems.indexOf(pair.item) === -1) {
+        allItems.push(pair.item);
+      }
+    });
+  };
+  getAllItems();
 
   RecEngine.find({ weight: { $lt: 9999999999 }}).fetch().forEach(function(x) {
     allEdges.push(x);
@@ -149,9 +165,27 @@ recEngine.suggest = function(userId, numberOfRecs, cb) {
     allEdges.push(x);
   }) // Finds all edges associated with the current user
 
-  result = allEdges;
+  allItems.forEach(function(item) {
+    var fn = new FlowNetwork(); // Must make a new flow network for each suggestion
 
-  var fn = new FlowNetwork();
+    allEdges.forEach(function(edge) { // add all the edges
+      fn.addEdge(edge.nodes[0], edge.nodes[1], edge.weight);
+    })
+
+    // console.log(fn.maxFlow(userId, item));
+    if (fn.maxFlow(userId, item) < 9999999999) {
+      result.push({ item: item, maxFlow: fn.maxFlow(userId, item) })
+
+    }
+  })
+
+
+
+
+  // what is the output going to look like?
+  // IT's going to be an array... of objects... with one
+
+
 
 
 
@@ -161,20 +195,3 @@ recEngine.suggest = function(userId, numberOfRecs, cb) {
   // set result to the top "numberOfRecs"
   return cb(error, result)
 }
-
-
-//
-//
-//
-// var fn = new FlowNetwork();
-// fn.addEdge('s','o',3);
-// fn.addEdge('s','p',3);
-// fn.addEdge('o','p',2);
-// fn.addEdge('o','q',3);
-// fn.addEdge('p','r',2);
-// fn.addEdge('r','t',3);
-// fn.addEdge('q','r',4);
-// fn.addEdge('q','t',2);
-// var max = fn.maxFlow('s','t');
-//
-// console.log(max);

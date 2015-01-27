@@ -21,4 +21,4 @@ recEngine.suggest('<USERID>', <NUMBER OF SUGGESTIONS>, function(error, result) {
   })
 ```
 
-Most of the logic comes from https://gist.github.com/methodin/1561824
+Much of the logic comes from https://gist.github.com/methodin/1561824
