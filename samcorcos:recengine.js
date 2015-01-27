@@ -146,7 +146,7 @@ recEngine.link = function(user, item) {
         tempArray = [item, xitem];
         tempArray.sort();
         if (RecEngine.find({nodes: tempArray}).fetch().length === 0) {
-          RecEngine.insert({ nodes: tempArray });
+          RecEngine.insert({ nodes: tempArray, weight: 0 });
         }
       }
     });
@@ -154,8 +154,6 @@ recEngine.link = function(user, item) {
   setDefaultValue();
   return "Successfully Linked"
 }
-
-
 
 recEngine.suggest = function(userId, numSuggestions, cb) {
   var error = "";
