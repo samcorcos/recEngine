@@ -20,3 +20,5 @@ recEngine.suggest('<USERID>', <NUMBER OF SUGGESTIONS>, function(error, result) {
   // "result" is an array of recommendations
   })
 ```
+
+Most of the logic comes from https://gist.github.com/methodin/1561824

@@ -1,120 +1,97 @@
 recEngine = {}
 
-recEngine.upvote = (user, item) ->
-  # 1) when we get a new item, pair it with all the other ones with at least a "1"
-  # 2) Get the weight of all items (sumWeight) and add "user" paired with each "item" with a "weight" of sumweight, using RecEngine.upsert
+Edge = (source, sink, capacity) ->
+  @source = source
+  @sink = sink
+  @capacity = capacity
+  @reverseEdge = null
+  @flow = 0
 
-  allItems = []
-  sumWeight = 0
-  allEdges = RecEngine.find().fetch()
-  allUsers = RecEngineUpvotes.find().fetch()
+FlowNetwork = () ->
+  @edges = {}
 
-  getSum = -> ############This is currently broken... Gets sum for all, including users
-    allEdges.forEach (edge) ->
-      sumWeight += edge.weight
-  getSum()
+  @findEdgeInPath = (path, edge, residual) ->
+    p = 0
+    while p < path.length
+      return true if path[p][0] is edge and path[p][1] is residual
+      p++
+    false
 
-  updateUserWeight = ->
-    allUsers.forEach (user) ->
-      # user.user and user.item
-      RecEngine.upsert
-        nodes: [
-          user.user
-          user.item
-        ]
-      ,
-        $set:
-          weight: sumWeight
+  @addEdge = (source, sink, capacity) ->
+    return if source is sink
+
+    edge = new Edge(source, sink, capacity)
+    reverseEdge = new Edge(sink, source, 0)
+
+    edge.reverseEdge = reverseEdge
+    reverseEdge.reverseEdge = edge
+
+    @edges[source] = [] if @edges[source] is undefined
+    @edges[sink] = [] if @edges[sink] is undefined
+
+    @edges[source].push(edge)
+    @edges[sink].push(reverseEdge)
     return
 
-  incrementWeight = -> # this function runs within the "addUserPair" function, because we only want to run the function if it's a new pair
-    temp = RecEngineUpvotes.find(user: user).fetch() # this is saying "find me all items this user is linked to"
+  @findPath = (source, sink, path) ->
+    return path if source is sink
+    i = 0
+    while i < @edges[source].length
+      edge = @edge[source][i]
+      residual = edge.capacity - edge.flow
 
-    temp.forEach (upvote) ->
-      unless upvote.item is item # this takes care of words that match themselves
+      if residual > 0 and not @findEdgeInPath(path, edge, residual)
+        tpath = path.slice(0)
+        tpath.push [edge, residual]
+        result = @findPath(edge.sink, sink, tpath)
+        return result if result?
+      i++
+    null
 
-        tempArray = [ upvote.item, item ];
-        tempArray.sort(); # sorts them so there are no repeats
+  # this is the equivalent of "suggest", as it finds the max flow for each
+  @maxFlow = (source, sink) ->
+    path = @findPath(source, sink, [])
+    while path?
+      flow = 99999999999
+      i = 0
+      while i < path.length
+        flow = path[i][1] if path[i][1] <flow
+        i++
 
-        RecEngine.update # this does not have to be upsert anymore, because all items should get created when we call setDefaultValue()
-          nodes: tempArray
-        ,
-          $inc:
-            weight: 1
-    return
+      i = 0
+      while i < path.length
+        path[i][0].flow += flow
+        path[i][0].reverseEdge.flow -= flow
+        i++
 
-  addUserPair = ->
-    unless RecEngineUpvotes.findOne( # unless a pair of this user and item already exists...
-      user: user
-      item: item
-    )
-      RecEngineUpvotes.insert # insert the pairing of the user and the item into RecEngine
-        user: user
-        item: item
+      path = @findPath(source, sink, [])
 
-      incrementWeight()
-    updateUserWeight()
-    return
-  addUserPair()
-
-  getAllItems = -> # makes allItems an array with all the unique items.
-    allUsers.forEach (pair, i) ->
-      allItems.push(pair.item) if allItems.indexOf(pair.item) is -1
-      return
-  getAllItems()
-
-  setDefaultValue = ->
-    allItems.forEach (xitem) ->
-      unless xitem is item
-        tempArray = [item, xitem]
-        tempArray.sort()
-        RecEngine.insert({ nodes: tempArray }) if RecEngine.find({ nodes: tempArray}).fetch().length is 0
-    return
-  setDefaultValue()
-
-
-  "Successfully linked!"
+    sum = 0
+    i = 0
+    while i < @edges[source].length
+      sum += @edges[source][i].flow
+      i++
+    sum
 
 
 
+# recEngine.upvote = (user, item) ->
+#
+#
+# var fn = new FlowNetwork();
 
+# var max = fn.maxFlow('s','t');
 
-recEngine.suggest = (user, responses = 1) ->
+fn = new FlowNetwork()
 
-  maxFlowObject = {}
+fn.addEdge('s','o',3)
+fn.addEdge('s','p',3)
+fn.addEdge('o','p',2)
+fn.addEdge('o','q',3)
+fn.addEdge('p','r',2)
+fn.addEdge('r','t',3)
+fn.addEdge('q','r',4)
+fn.addEdge('q','t',2)
 
-  createUserEdges = (user) ->
-
-
-  findPath = (source, sink, path) ->
-    # Finds the path from source to sink
-    path if source is sink
-
-
-
-
-    # for(var i=0;i<this.edges[source].length;i++) {
-    #         var edge = this.edges[source][i];
-    #         var residual = edge.capacity - edge.flow;
-    #
-    #         // If we have capacity and we haven't already visited this edge, visit it
-    #         if(residual > 0 && !this.findEdgeInPath(path, edge, residual)) {
-    #             var tpath = path.slice(0);
-    #             tpath.push([edge, residual]);
-    #             var result = this.findPath(edge.sink, sink, tpath);
-    #             if(result != null) return result;
-    #         }
-    #     }
-    #     return null;
-
-  maxFlow = (user) ->
-    # the params are really "user" as the source and "every item" as the sink
-
-
-  maxFlow user
-
-
-
-    # for every item in RecEngine, add the item and it's max flow to the maxFlowObject
-    # Then sort the responses (with _.invert)
-    # then return the number of responses requested
+max = fn.maxFlow("s", "t")
+console.log max
