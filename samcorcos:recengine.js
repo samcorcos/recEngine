@@ -141,7 +141,7 @@ recEngine.upvote = function(user, item) {
 
 
 
-recEngine.suggest = function(userId, numberOfRecs, cb) {
+recEngine.suggest = function(userId, numSuggestions, cb) {
   var error = "";
   var result = [];
 
@@ -172,26 +172,22 @@ recEngine.suggest = function(userId, numberOfRecs, cb) {
       fn.addEdge(edge.nodes[0], edge.nodes[1], edge.weight);
     })
 
-    // console.log(fn.maxFlow(userId, item));
     if (fn.maxFlow(userId, item) < 9999999999) {
-      result.push({ item: item, maxFlow: fn.maxFlow(userId, item) })
+      result.push({ suggestion: item, weight: fn.maxFlow(userId, item) })
 
     }
   })
 
+  result.sort(function(a,b) {
+    if (a.weight < b.weight) { return 1; }
+    if (a.weight > b.weight) { return -1; }
+    return 0;
+  })
 
+  if (numSuggestions > result.length) {
+    error = "Insufficient data! Only data for " + result.length + " suggestions."
+    console.error(error);
+  }
 
-
-  // what is the output going to look like?
-  // IT's going to be an array... of objects... with one
-
-
-
-
-
-
-  // _.invert(result);
-
-  // set result to the top "numberOfRecs"
   return cb(error, result)
 }
