@@ -116,3 +116,4 @@ Keep in mind that this package only allows users to vote on each item once, whic
 2. Configurable number of records stored, to allow developer to change performance `recEngine.config.numRecords`
 3. Add a method for finding similar users `recEngine.similarUsers`
 4. Add a method for finding similar items `recEngine.similarItems`
+5. Divide inputs into contexts so retrieval can be categorized
