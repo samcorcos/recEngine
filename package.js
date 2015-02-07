@@ -8,11 +8,17 @@ Package.describe({
 
 Package.onUse(function(api) {
   api.versionsFrom('1.0.3.1');
-  api.use("underscore")
-  api.export("recEngine", "server")
-  api.export("RecEngine", "server")
-  api.export("RecEngineLinks", "server")
+  api.use([
+    'underscore',
+    'coffeescript',
+    'ccorcos:ford-fulkerson@1.0.0'
+  ])
+  api.export('recEngine', 'server')
+  api.export('RecEngine', 'server')
+
+  api.export('RecEngineLinks', 'server')
   api.addFiles('samcorcos:recengine.js')
+  api.addFiles('samcorcos:recengine.coffee')
 });
 
 Package.onTest(function(api) {

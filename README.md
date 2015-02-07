@@ -29,8 +29,6 @@ Suggestions are produced using the [Ford-Fulkerson algorithm](http://en.wikipedi
 
 To provide an analogy, think of the algorithm as finding the most efficient way to drive from point A to point B, taking into consideration the number of lanes each street has—streets with more lanes are better.
 
-Much of the logic comes from: https://gist.github.com/methodin/1561824
-
 Runs in `O(E*Fm)` time, where `E` is the number of edges, and `Fm` is the maximum flow.
 
 
