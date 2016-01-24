@@ -1,3 +1,5 @@
+[**DEPRECATED:** This approach does not scale. I highly recomment looking into a graph database such as Neo4j to solve this problem.]
+
 # RecEngine
 
 Lightweight, easily implemented recommendation engine. This package is for users who are "liking" things, "purchasing" things, or "voting" on things.
