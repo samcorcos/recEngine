@@ -1,4 +1,4 @@
-[**DEPRECATED:** This approach does not scale. I highly recomment looking into a graph database such as Neo4j to solve this problem.]
+[**DEPRECATED:** This approach does not scale. I highly recommend looking into a graph database such as Neo4j to solve this problem.]
 
 # RecEngine
 
